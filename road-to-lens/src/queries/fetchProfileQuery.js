@@ -26,6 +26,7 @@ export default gql`
         }
         profile(request: $request) {
             id
+            interests
             name
             bio
             attributes {

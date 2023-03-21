@@ -1,8 +1,8 @@
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import fetchProfileQuery from "../../queries/fetchProfileQuery.js";
-import Profile from "../../components/Profile.js";
-import Post from "../../components/Post.js";
+import fetchProfileQuery from "@/queries/fetchProfileQuery";
+import Profile from "@/components/Profile.js";
+import Post from "@/components/Post.js";
 
 export default function ProfilePage() {
     const router = useRouter();
