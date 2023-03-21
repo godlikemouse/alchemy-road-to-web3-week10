@@ -14,6 +14,8 @@ export default function ProfilePage() {
 
     if (loading) return "Loading..";
 
+    console.info("profile:", profile);
+
     return (
         <div className="flex flex-col p-8 items-center">
             <Profile profile={profile} displayFullProfile={true} />

@@ -1,6 +1,8 @@
 export default function Interests(props) {
     const { profile } = props;
 
+    console.info("profile interests", profile.interests);
+
     if (!profile.interests?.length) return null;
 
     return (
