@@ -1,33 +1,24 @@
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import fetchProfileQuery from "@/queries/fetchProfileQuery";
-import Profile from "@/components/Profile.js";
-import Post from "@/components/Post.js";
+import Profile from "@/components/Profile";
+import PublicationList from "@/components/PublicationList";
+import { useProfile } from "@lens-protocol/react-web";
+import Interests from "@/components/Interests";
 
 export default function ProfilePage() {
     const router = useRouter();
     const { id } = router.query;
 
     console.log("fetching profile for", id);
-    const { loading, error, data } = useQuery(fetchProfileQuery, {
-        variables: {
-            request: { profileId: id },
-            publicationsRequest: {
-                profileId: id,
-                publicationTypes: ["POST"],
-            },
-        },
-    });
+    const { loading, data: profile } = useProfile({ profileId: id });
 
     if (loading) return "Loading..";
-    if (error) return `Error! ${error.message}`;
 
     return (
         <div className="flex flex-col p-8 items-center">
-            <Profile profile={data.profile} displayFullProfile={true} />
-            {data.publications.items.map((post, idx) => {
-                return <Post key={idx} post={post} />;
-            })}
+            <Profile profile={profile} displayFullProfile={true} />
+            <PublicationList profile={profile} />
+            <Interests profile={profile} />
         </div>
     );
 }

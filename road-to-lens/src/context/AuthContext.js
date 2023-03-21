@@ -1,16 +1,31 @@
 import { createContext, useContext, useState } from "react";
 
-const Context = createContext();
-
+const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(null);
     return (
-        <Context.Provider value={[token, setToken]}>
+        <AuthContext.Provider value={[token, setToken]}>
             {children}
-        </Context.Provider>
+        </AuthContext.Provider>
     );
 }
 
 export function useAuthContext() {
-    return useContext(Context);
+    return useContext(AuthContext);
+}
+
+const ActiveProfileContext = createContext();
+export function ActiveProfileProvider({ children }) {
+    const [activeProfile, setActiveProfile] = useState(null);
+    return (
+        <ActiveProfileContext.Provider
+            value={[activeProfile, setActiveProfile]}
+        >
+            {children}
+        </ActiveProfileContext.Provider>
+    );
+}
+
+export function useActiveProfileContext() {
+    return useContext(ActiveProfileContext);
 }

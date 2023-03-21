@@ -1,22 +1,24 @@
 import "@/styles/globals.css";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/apollo-client";
-import { AuthProvider } from "@/context/AuthContext";
+import { ActiveProfileProvider, AuthProvider } from "@/context/AuthContext";
 import Navigation from "@/components/Navigation";
 import { LensProvider } from "@lens-protocol/react-web";
-import { LensConfig, staging } from "@lens-protocol/react-web";
+import { production } from "@lens-protocol/react-web";
 
 export default function App({ Component, pageProps }) {
     const lensConfig = {
-        environment: staging,
+        environment: production,
     };
 
     return (
         <LensProvider config={lensConfig}>
             <ApolloProvider client={client}>
                 <AuthProvider>
-                    <Navigation />
-                    <Component {...pageProps} />
+                    <ActiveProfileProvider>
+                        <Navigation />
+                        <Component {...pageProps} />
+                    </ActiveProfileProvider>
                 </AuthProvider>
             </ApolloProvider>
         </LensProvider>

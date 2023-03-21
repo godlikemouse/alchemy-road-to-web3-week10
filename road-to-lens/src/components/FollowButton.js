@@ -1,20 +1,14 @@
+import { useActiveProfileContext } from "@/context/AuthContext";
 import { useProfile, useFollow } from "@lens-protocol/react-web";
 
 export function FollowButton(props) {
-    const { profileId } = props;
-
-    const { data: profile, loading } = useProfile({ profileId });
-    console.info("profile data:", profile);
-
-    //TODO: load follower
+    const { profile } = props;
 
     const {
         execute: follow,
         error,
         isPending,
-    } = useFollow({ followee: profile ?? {} });
-
-    if (loading) return null;
+    } = useFollow({ followee: profile });
 
     if (profile.isFollowedByMe) {
         return <p>Following</p>;

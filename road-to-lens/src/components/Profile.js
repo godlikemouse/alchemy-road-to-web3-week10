@@ -1,14 +1,11 @@
 // components/Profile.js
 
 import Link from "next/link";
-import { useAuthContext } from "@/context/AuthContext.js";
-import { FollowButton } from "./FollowButton";
+import { useAuthContext } from "@/context/AuthContext";
+import FollowButton from "@/components/FollowButton";
 
 export default function Profile(props) {
-    const profile = props.profile;
-
-    // When displayFullProfile is true, we show more info.
-    const displayFullProfile = props.displayFullProfile;
+    const { profile, displayFullProfile } = props;
 
     const [token] = useAuthContext();
 
@@ -53,29 +50,10 @@ export default function Profile(props) {
                                 following: {profile.stats.totalFollowing}{" "}
                                 followers: {profile.stats.totalFollowers}
                             </p>
-                            {token ? (
-                                <FollowButton profileId={profile.id} />
-                            ) : null}
+                            {token && <FollowButton profile={profile} />}
                         </div>
                     </div>
                 </div>
-                {profile.interests && profile.interests.length ? (
-                    <div className="mt-2 max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-                        <div className="flex flex-wrap">
-                            <div className="text-slate-500 px-2 py-1 text-xs font-bold">
-                                Interests:
-                            </div>
-                            {profile.interests.map((i) => (
-                                <span
-                                    key={i}
-                                    className="text-slate-500 px-2 py-1 text-xs"
-                                >
-                                    {i}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                ) : null}
             </Link>
         </div>
     );
