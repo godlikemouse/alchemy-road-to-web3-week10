@@ -17,7 +17,7 @@ export default function Post(props) {
                             {post.metadata.mainContentFocus == "IMAGE" && (
                                 <img
                                     src={post.metadata.image}
-                                    className="h-40 mr-2 mb-2 float-left"
+                                    className=" mb-2 w-screen"
                                     onError={({ currentTarget }) =>
                                         (currentTarget.style.display = "none")
                                     }

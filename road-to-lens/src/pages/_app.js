@@ -1,14 +1,14 @@
 import "@/styles/globals.css";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/apollo-client";
+import { LensProvider, staging, production } from "@lens-protocol/react-web";
 import { ActiveProfileProvider, AuthProvider } from "@/context/AuthContext";
 import Navigation from "@/components/Navigation";
-import { LensProvider } from "@lens-protocol/react-web";
-import { production } from "@lens-protocol/react-web";
+import AuthProxy from "@/components/AuthProxy";
 
 export default function App({ Component, pageProps }) {
     const lensConfig = {
-        environment: production,
+        environment: staging,
     };
 
     return (
@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }) {
             <ApolloProvider client={client}>
                 <AuthProvider>
                     <ActiveProfileProvider>
+                        <AuthProxy />
                         <Navigation />
                         <Component {...pageProps} />
                     </ActiveProfileProvider>

@@ -60,11 +60,13 @@ export default function LoginButton(props) {
                     authenticate: { accessToken },
                 },
             } = authData;
+            console.info("setting token:", accessToken);
             setToken(accessToken);
         } catch (err) {
             console.log("Error signing in: ", err);
         }
     }
+
     return (
         <>
             {!address && (
