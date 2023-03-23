@@ -1,12 +1,14 @@
-import { useActiveProfileContext } from "@/context/AuthContext";
 import { useActiveProfile } from "@lens-protocol/react-web";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCreateProfile, isValidHandle } from "@lens-protocol/react-web";
+import { useRouter } from "next/navigation";
+import { useActiveProfileContext } from "@/context/AuthContext";
 
 export default function VerifyProfile(props) {
-    const [activeProfile, setActiveProfile] = useActiveProfileContext();
+    const { push: redirect } = useRouter();
     const [lensHandle, setLensHandle] = useState(null);
     const [validationError, setValidationError] = useState(null);
+    const [activeProfile, setActiveProfile] = useActiveProfileContext();
     const { data, error, loading } = useActiveProfile();
     const {
         execute: createProfile,
@@ -14,14 +16,20 @@ export default function VerifyProfile(props) {
         isPending: createProfilePending,
     } = useCreateProfile();
 
-    if (loading) return "Verifying...";
+    useEffect(() => {
+        if (data) {
+            setActiveProfile(data);
+            redirect("/");
+        }
+    }, [data]);
+
+    if (loading) return "Loading...";
     if (error) return `Error: ${error}`;
 
     const onCreateProfile = async () => {
         try {
             console.info("Creating profile for:", lensHandle);
-            const res = await createProfile(lensHandle);
-            console.info(res);
+            await createProfile(lensHandle);
         } catch (ex) {
             console.error("Error onCreateProfile:", ex);
         }
@@ -33,7 +41,7 @@ export default function VerifyProfile(props) {
                 <h1>Account Not Found</h1>
                 <div className="text-slate-600 mt-2">
                     <p>You don't appear to have a Lens profile.</p>
-                    <p>Please create one by choosing a handle below</p>
+                    <p>Please create one by choosing a handle below.</p>
                 </div>
                 <div className="mt-2">
                     <input
@@ -68,6 +76,4 @@ export default function VerifyProfile(props) {
             </div>
         );
     }
-
-    return <h1>Verify</h1>;
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { challenge, authenticate } from "@/queries/auth.js";
-import client from "@/apollo-client.js";
 import { useAuthContext } from "@/context/AuthContext";
+import { useWalletLogin } from "@lens-protocol/react-web";
+import { bindings } from "@/ether-bindings";
 
 export default function LoginButton(props) {
     const [address, setAddress] = useState();
     const [token, setToken] = useAuthContext();
+    const { execute: walletLogin, error, isPending } = useWalletLogin();
 
     useEffect(() => {
         // when the app loads, check to see if the user has already connected their wallet
@@ -31,37 +32,15 @@ export default function LoginButton(props) {
 
     async function login() {
         try {
-            // first request the challenge from the API server
-            const challengeInfo = await client.query({
-                query: challenge,
-                variables: { address },
-            });
-
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
 
-            // ask the user to sign a message with the challenge info returned from the server
-            const signature = await signer.signMessage(
-                challengeInfo.data.challenge.text
-            );
+            signer.bindings = bindings();
 
-            // authenticate the user
-            const authData = await client.mutate({
-                mutation: authenticate,
-                variables: {
-                    address,
-                    signature,
-                },
-            });
+            await walletLogin(signer);
 
-            // if user authentication is successful, you will receive an accessToken and refreshToken
-            const {
-                data: {
-                    authenticate: { accessToken },
-                },
-            } = authData;
-            console.info("setting token:", accessToken);
-            setToken(accessToken);
+            const credentials = JSON.parse(localStorage["lens.credentials"]);
+            setToken(credentials.data.refreshToken);
         } catch (err) {
             console.log("Error signing in: ", err);
         }

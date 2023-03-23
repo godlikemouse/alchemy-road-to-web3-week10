@@ -5,6 +5,7 @@ import { useAuthContext } from "@/context/AuthContext";
 
 export default function Profile(props) {
     const { profile, displayFullProfile } = props;
+    const [token] = useAuthContext();
 
     return (
         <div
