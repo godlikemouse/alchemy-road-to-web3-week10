@@ -16,5 +16,4 @@ Change directory to `./road-to-lens` and execute the following:
 
 ## TODO
 
--   Deploy your application to the world wide web, using a service like Repl.it or Vercel.
 -   Use the Lit Protocol SDK to token-gate access to your Lens protocol posts so that only MintKudos token holders can view them.
